@@ -2,12 +2,11 @@ import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 
 interface NavbarProps {
-  currentWindow: string
   setCurrentWindow: (window: string) => void
   onBSOD: () => void
 }
 
-export default function Navbar({ currentWindow, setCurrentWindow, onBSOD }: NavbarProps) {
+export default function Navbar({ setCurrentWindow, onBSOD }: NavbarProps) {
   const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 

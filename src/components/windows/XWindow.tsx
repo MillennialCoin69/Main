@@ -11,13 +11,13 @@ interface XWindowProps {
 
 export default function XWindow({ title, onClose, onMinimize, style }: XWindowProps) {
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
         w={600}
         h={500}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
           height: '100%',
@@ -27,6 +27,5 @@ export default function XWindow({ title, onClose, onMinimize, style }: XWindowPr
           <X />
         </div>
       </Window95Frame>
-    </div>
   )
 } 

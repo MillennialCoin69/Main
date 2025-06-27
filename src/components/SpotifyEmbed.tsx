@@ -1,12 +1,10 @@
 import { useState } from 'react'
 
 interface SpotifyEmbedProps {
-  playlistId?: string
   title?: string
 }
 
 export default function SpotifyEmbed({ 
-  playlistId = "37i9dQZF1DX4o1oenSJRJd", // 2000s hits playlist
   title = "🎵 Millennial Vibes" 
 }: SpotifyEmbedProps) {
   const [isPlaying, setIsPlaying] = useState(false)

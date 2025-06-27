@@ -15,23 +15,20 @@ export default function Community() {
         <p>Connect with fellow millennials who remember the good old days!</p>
         
         <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(2, 1fr)', 
-          gap: '15px',
+          display: 'flex',
+          justifyContent: 'center',
           margin: '20px 0'
         }}>
-          <button className="retro-button" style={{ padding: '10px' }}>
-            💬 Discord
-          </button>
-          <button className="retro-button" style={{ padding: '10px' }}>
-            📱 Telegram
-          </button>
-          <button className="retro-button" style={{ padding: '10px' }}>
-            🤖 Reddit
-          </button>
-          <button className="retro-button" style={{ padding: '10px' }}>
-            📧 Newsletter
-          </button>
+          <a 
+            href="https://x.com/i/communities/1918420424129691736" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <button className="retro-button" style={{ padding: '15px 20px' }}>
+              🐦 X Community
+            </button>
+          </a>
         </div>
         
         <div style={{ fontSize: '9px', color: '#666', marginTop: '20px' }}>

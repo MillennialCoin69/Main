@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import DesktopIcon from './DesktopIcon'
 import DesktopLogo from './DesktopLogo'
-import Window95Frame from './Window95Frame'
 import Taskbar from './Taskbar'
 import StartMenu from './StartMenu'
 import MemeCenterWindow from './windows/MemeCenterWindow'
@@ -14,6 +13,7 @@ import XWindow from './windows/XWindow'
 import CommunityWindow from './windows/CommunityWindow'
 import DexScreenerWindow from './windows/DexScreenerWindow'
 import DexToolsWindow from './windows/DexToolsWindow'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 // Import legacy assets
 import badLuckBrian from '../assets/legacy/images/Bad_Luck_Brian.webp'
@@ -38,6 +38,7 @@ export default function Desktop({ onBSOD }: DesktopProps) {
   const [openWindows, setOpenWindows] = useState<OpenWindow[]>([])
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [nextZIndex, setNextZIndex] = useState(1000)
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const desktopIcons = [
     // Main token info
@@ -67,7 +68,7 @@ export default function Desktop({ onBSOD }: DesktopProps) {
     {
       id: 'community',
       title: 'Community',
-      icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMCIgcj0iNCIgZmlsbD0iIzAwODA4MCIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjEwIiByPSI0IiBmaWxsPSIjMDA4MDgwIi8+CjxwYXRoIGQ9Ik00IDI0QzQgMjAgOCAyMCAxMiAyMFMxNiAyMCAxNiAyNEg0WiIgZmlsbD0iIzAwODA4MCIvPgo8cGF0aCBkPSJNMTYgMjRDMTYgMjAgMjAgMjAgMjQgMjBTMjggMjAgMjggMjRIMTZaIiBmaWxsPSIjMDA4MDgwIi8+Cjwvc3ZnPgo=',
+      icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMCIgcj0iNCIgZmlsbD0iIzAwODA4MCIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjEwIiByPSI0IiBmaWxsPSIjMDA4MDgwIi8+CjxwYXRoIGQ9Ik00IDI0QzQgMjAgOCAyMCAxMiAyMFMxNiAyMCAxNiAyNEg0WiIgZmlsbD0iIzAwODA4MCIvPgo8cGF0aCBkPSJNMTYgMjRDMTYgMjAgMjAgMjAgMjQgMjRTMjggMjAgMjggMjRIMTZaIiBmaWxsPSIjMDA4MDgwIi8+Cjwvc3ZnPgo=',
       type: 'community',
       position: { x: 20, y: 320 }
     },
@@ -207,9 +208,64 @@ export default function Desktop({ onBSOD }: DesktopProps) {
     }
   }
 
-  return (
+  const mobileLayout = (
+    <div className="desktop-wallpaper mobile-desktop" style={{ 
+      width: '100%', 
+      height: '100vh', 
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <DesktopLogo />
+      <div 
+        className="mobile-icons-grid"
+        style={{
+          position: 'absolute',
+          bottom: '80px', // Above taskbar
+          left: '0',
+          right: '0',
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '8px',
+          padding: '10px',
+          maxHeight: '180px',
+          overflowY: 'auto',
+          background: 'rgba(0, 0, 0, 0.3)',
+          backdropFilter: 'blur(10px)',
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          // Hide scrollbar for aesthetics
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none'
+        }}
+      >
+        {desktopIcons.map(icon => (
+          <DesktopIcon
+            key={icon.id}
+            title={icon.title}
+            icon={icon.icon}
+            onClick={() => openWindow(icon.id, icon.type, icon.title)}
+          />
+        ))}
+      </div>
+      {openWindows.map(renderWindow)}
+      {showStartMenu && (
+        <StartMenu 
+          onClose={() => setShowStartMenu(false)}
+          onBSOD={onBSOD}
+        />
+      )}
+      <Taskbar
+        openWindows={openWindows}
+        onStartClick={() => setShowStartMenu(!showStartMenu)}
+        onWindowClick={restoreWindow}
+      />
+    </div>
+  );
+
+  const desktopLayout = (
     <div className="desktop-wallpaper" style={{ 
-      width: '100vw', 
+      width: '100%', 
       height: '100vh', 
       position: 'relative'
     }}>
@@ -223,7 +279,7 @@ export default function Desktop({ onBSOD }: DesktopProps) {
           title={icon.title}
           icon={icon.icon}
           position={icon.position}
-          onDoubleClick={() => openWindow(icon.id, icon.type, icon.title)}
+          onClick={() => openWindow(icon.id, icon.type, icon.title)}
           isRightSide={icon.isRightSide}
         />
       ))}
@@ -247,4 +303,6 @@ export default function Desktop({ onBSOD }: DesktopProps) {
       />
     </div>
   )
+
+  return isMobile ? mobileLayout : desktopLayout;
 } 

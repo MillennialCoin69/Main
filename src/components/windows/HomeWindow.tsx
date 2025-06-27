@@ -11,13 +11,13 @@ interface HomeWindowProps {
 
 export default function HomeWindow({ title, onClose, onMinimize, style }: HomeWindowProps) {
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
         w={700}
         h={600}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
           height: '100%',
@@ -27,6 +27,5 @@ export default function HomeWindow({ title, onClose, onMinimize, style }: HomeWi
           <Home />
         </div>
       </Window95Frame>
-    </div>
   )
 } 

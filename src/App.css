@@ -40,3 +40,22 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Window styles */
+.window95-frame {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Prevent text selection in window headers */
+.window-header {
+  user-select: none;
+}
+
+/* Improve button hover states */
+.window-header-button:hover {
+  filter: brightness(1.1);
+}
+
+.window-header-button:active {
+  border: 1px inset #fff !important;
+}

@@ -14,9 +14,16 @@ export default function DexTools() {
         <h2 style={{ color: '#000080' }}>🔧 DexTools</h2>
         <p>Advanced trading tools and analytics!</p>
         <div style={{ margin: '20px 0' }}>
-          <button className="retro-button">
-            🛠️ View on DexTools
-          </button>
+          <a 
+            href="https://www.dextools.io/app/en/solana/pair-explorer/DUPU7MQttgK36UgdHsEzaKfKqjeKP5Q4YzJBy8tSCnwk" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <button className="retro-button">
+              🛠️ View on DexTools
+            </button>
+          </a>
         </div>
         <div style={{ fontSize: '9px', color: '#666' }}>
           Remember when the most advanced tool was a calculator? 

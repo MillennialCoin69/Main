@@ -14,9 +14,16 @@ export default function X() {
         <h2 style={{ color: '#000080' }}>🐦 Follow us on X</h2>
         <p>Connect with the Millennial Coin community!</p>
         <div style={{ margin: '20px 0' }}>
-          <button className="retro-button">
-            🔗 @MillennialCoin
-          </button>
+          <a 
+            href="https://x.com/MillennialOfSol" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <button className="retro-button">
+              🔗 @MillennialOfSol
+            </button>
+          </a>
         </div>
         <div style={{ fontSize: '9px', color: '#666' }}>
           Remember when it was called Twitter? Pepperidge Farm remembers.

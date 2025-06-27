@@ -1,6 +1,7 @@
 import { type CSSProperties } from 'react'
 import Window95Frame from '../Window95Frame'
 import badLuckBrian from '../../assets/legacy/images/Bad_Luck_Brian.webp'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 interface MemeCenterWindowProps {
   title: string
@@ -10,6 +11,7 @@ interface MemeCenterWindowProps {
 }
 
 export default function MemeCenterWindow({ title, onClose, onMinimize, style }: MemeCenterWindowProps) {
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const memes = [
     {
       image: badLuckBrian,
@@ -20,38 +22,38 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
   ]
 
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
         w={500}
         h={400}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
-          padding: '16px',
+        padding: isMobile ? '8px' : '16px',
           height: '100%',
           overflow: 'auto',
           background: '#c0c0c0'
         }}>
           <div style={{
             textAlign: 'center',
-            marginBottom: '20px',
-            padding: '12px',
+          marginBottom: isMobile ? '12px' : '20px',
+          padding: isMobile ? '8px' : '12px',
             background: '#000080',
             color: 'white',
             border: '2px inset #c0c0c0'
           }}>
             <h2 style={{
               margin: 0,
-              fontSize: '16px',
+            fontSize: isMobile ? '12px' : '16px',
               fontFamily: 'Press Start 2P, monospace'
             }}>
               😂 MEME CENTER 😂
             </h2>
             <p style={{
               margin: '8px 0 0 0',
-              fontSize: '11px',
+            fontSize: isMobile ? '9px' : '11px',
               fontFamily: 'MS Sans Serif, sans-serif'
             }}>
               Classic 2000s Internet Gold
@@ -60,15 +62,15 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
 
           {memes.map((meme, index) => (
             <div key={index} style={{
-              marginBottom: '20px',
-              padding: '16px',
+            marginBottom: isMobile ? '12px' : '20px',
+            padding: isMobile ? '8px' : '16px',
               background: '#fff',
               border: '2px inset #c0c0c0',
               textAlign: 'center'
             }}>
               <h3 style={{
                 margin: '0 0 12px 0',
-                fontSize: '12px',
+              fontSize: isMobile ? '10px' : '12px',
                 fontFamily: 'MS Sans Serif, sans-serif',
                 color: '#000080'
               }}>
@@ -84,8 +86,8 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
                   src={meme.image} 
                   alt={meme.title}
                   style={{
-                    width: '300px',
-                    height: '300px',
+                  width: isMobile ? '250px' : '300px',
+                  height: isMobile ? '250px' : '300px',
                     objectFit: 'cover',
                     display: 'block'
                   }}
@@ -98,12 +100,12 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
                   left: '50%',
                   transform: 'translateX(-50%)',
                   color: 'white',
-                  fontSize: '16px',
+                fontSize: isMobile ? '12px' : '16px',
                   fontFamily: 'Impact, Arial Black, sans-serif',
                   fontWeight: 'bold',
                   textAlign: 'center',
                   textShadow: '2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000',
-                  maxWidth: '280px',
+                maxWidth: isMobile ? '230px' : '280px',
                   lineHeight: '1.1'
                 }}>
                   {meme.topText}
@@ -116,12 +118,12 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
                   left: '50%',
                   transform: 'translateX(-50%)',
                   color: 'white',
-                  fontSize: '16px',
+                fontSize: isMobile ? '12px' : '16px',
                   fontFamily: 'Impact, Arial Black, sans-serif',
                   fontWeight: 'bold',
                   textAlign: 'center',
                   textShadow: '2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000',
-                  maxWidth: '280px',
+                maxWidth: isMobile ? '230px' : '280px',
                   lineHeight: '1.1'
                 }}>
                   {meme.bottomText}
@@ -132,16 +134,15 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
 
           <div style={{
             textAlign: 'center',
-            padding: '12px',
+          padding: isMobile ? '8px' : '12px',
             background: '#ffff80',
             border: '2px inset #c0c0c0',
-            fontSize: '11px',
+          fontSize: isMobile ? '9px' : '11px',
             fontFamily: 'MS Sans Serif, sans-serif'
           }}>
             <p>💡 <strong>Fun Fact:</strong> Bad Luck Brian became an internet sensation in 2012, but the photo was taken in 2000 for a school yearbook!</p>
           </div>
         </div>
       </Window95Frame>
-    </div>
   )
 } 

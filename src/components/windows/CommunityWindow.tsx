@@ -11,13 +11,13 @@ interface CommunityWindowProps {
 
 export default function CommunityWindow({ title, onClose, onMinimize, style }: CommunityWindowProps) {
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
         w={650}
         h={550}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
           height: '100%',
@@ -27,6 +27,5 @@ export default function CommunityWindow({ title, onClose, onMinimize, style }: C
           <Community />
         </div>
       </Window95Frame>
-    </div>
   )
 } 

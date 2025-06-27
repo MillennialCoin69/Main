@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Desktop from './components/Desktop'
 import CRTOverlay from './components/CRTOverlay'
 import BSODModal from './components/BSODModal'

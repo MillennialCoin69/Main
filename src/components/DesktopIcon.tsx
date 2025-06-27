@@ -3,39 +3,23 @@ import { useState } from 'react'
 interface DesktopIconProps {
   title: string
   icon: string
-  position: { x: number; y: number }
-  onDoubleClick: () => void
+  position?: { x: number; y: number }
+  onClick: () => void
   isRightSide?: boolean
 }
 
-export default function DesktopIcon({ title, icon, position, onDoubleClick, isRightSide = false }: DesktopIconProps) {
+export default function DesktopIcon({ title, icon, position, onClick, isRightSide = false }: DesktopIconProps) {
   const [isSelected, setIsSelected] = useState(false)
-  const [clickCount, setClickCount] = useState(0)
 
   const handleClick = () => {
     setIsSelected(true)
-    setClickCount(prev => prev + 1)
+    onClick()
     
-    // Reset selection after 3 seconds
-    setTimeout(() => setIsSelected(false), 3000)
-    
-    // Handle double click
-    setTimeout(() => {
-      if (clickCount === 1) {
-        onDoubleClick()
-        setClickCount(0)
-      }
-    }, 300)
+    // Reset selection after a short time
+    setTimeout(() => setIsSelected(false), 500)
   }
 
-  return (
-    <div
-      className={`desktop-icon ${isSelected ? 'selected' : ''} ${isRightSide ? 'right-side' : ''}`}
-      style={{
-        position: 'absolute',
-        left: isRightSide ? 'auto' : position.x,
-        right: isRightSide ? position.x : 'auto',
-        top: position.y,
+  const style: React.CSSProperties = {
         width: '80px',
         height: '80px',
         display: 'flex',
@@ -47,9 +31,20 @@ export default function DesktopIcon({ title, icon, position, onDoubleClick, isRi
         background: isSelected ? 'rgba(0, 0, 255, 0.3)' : 'transparent',
         border: isSelected ? '1px dotted white' : '1px dotted transparent',
         borderRadius: '2px'
-      }}
+  }
+
+  if (position) {
+    style.position = 'absolute';
+    style.left = isRightSide ? 'auto' : position.x;
+    style.right = isRightSide ? position.x : 'auto';
+    style.top = position.y;
+  }
+
+  return (
+    <div
+      className={`desktop-icon ${isSelected ? 'selected' : ''} ${isRightSide ? 'right-side' : ''}`}
+      style={style}
       onClick={handleClick}
-      onDoubleClick={onDoubleClick}
     >
       {/* Icon Image */}
       <div style={{

@@ -11,13 +11,13 @@ interface DexScreenerWindowProps {
 
 export default function DexScreenerWindow({ title, onClose, onMinimize, style }: DexScreenerWindowProps) {
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
         w={800}
         h={600}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
           height: '100%',
@@ -27,6 +27,5 @@ export default function DexScreenerWindow({ title, onClose, onMinimize, style }:
           <DexScreener />
         </div>
       </Window95Frame>
-    </div>
   )
 } 

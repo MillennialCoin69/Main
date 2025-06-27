@@ -11,13 +11,13 @@ interface DexToolsWindowProps {
 
 export default function DexToolsWindow({ title, onClose, onMinimize, style }: DexToolsWindowProps) {
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
         w={800}
         h={600}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
           height: '100%',
@@ -27,6 +27,5 @@ export default function DexToolsWindow({ title, onClose, onMinimize, style }: De
           <DexTools />
         </div>
       </Window95Frame>
-    </div>
   )
 } 

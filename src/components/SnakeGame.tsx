@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 interface Position {
   x: number
@@ -10,6 +11,7 @@ const CANVAS_WIDTH = 300
 const CANVAS_HEIGHT = 200
 
 export default function SnakeGame() {
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [snake, setSnake] = useState<Position[]>([{ x: 15, y: 10 }])
   const [food, setFood] = useState<Position>({ x: 25, y: 15 })
@@ -38,6 +40,15 @@ export default function SnakeGame() {
     setIsPlaying(true)
     setIsPaused(false)
   }
+
+  const changeDirection = useCallback((newDirection: Position) => {
+    if (!isPlaying || gameOver || isPaused) return
+    
+    // Prevent reversing into self
+    if (direction.x === -newDirection.x && direction.y === -newDirection.y) return
+    
+    setDirection(newDirection)
+  }, [direction, isPlaying, gameOver, isPaused])
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
@@ -119,16 +130,16 @@ export default function SnakeGame() {
       
       switch (e.key) {
         case 'ArrowUp':
-          if (direction.y === 0) setDirection({ x: 0, y: -1 })
+          if (direction.y === 0) changeDirection({ x: 0, y: -1 })
           break
         case 'ArrowDown':
-          if (direction.y === 0) setDirection({ x: 0, y: 1 })
+          if (direction.y === 0) changeDirection({ x: 0, y: 1 })
           break
         case 'ArrowLeft':
-          if (direction.x === 0) setDirection({ x: -1, y: 0 })
+          if (direction.x === 0) changeDirection({ x: -1, y: 0 })
           break
         case 'ArrowRight':
-          if (direction.x === 0) setDirection({ x: 1, y: 0 })
+          if (direction.x === 0) changeDirection({ x: 1, y: 0 })
           break
         case ' ':
           pause()
@@ -138,7 +149,7 @@ export default function SnakeGame() {
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [direction, isPlaying, pause])
+  }, [direction, isPlaying, pause, changeDirection])
 
   useEffect(() => {
     draw()
@@ -149,16 +160,44 @@ export default function SnakeGame() {
     return () => clearInterval(gameInterval)
   }, [moveSnake])
 
+  const DirectionButton = ({ direction: dir, children, style }: { 
+    direction: Position, 
+    children: React.ReactNode, 
+    style?: React.CSSProperties 
+  }) => (
+    <button
+      className="retro-button"
+      onTouchStart={(e) => {
+        e.preventDefault()
+        changeDirection(dir)
+      }}
+      onClick={() => changeDirection(dir)}
+      style={{
+        width: '40px',
+        height: '40px',
+        fontSize: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        ...style
+      }}
+    >
+      {children}
+    </button>
+  )
+
   return (
     <div style={{ 
       border: '2px inset #c0c0c0', 
-      padding: '10px', 
+      padding: isMobile ? '8px' : '10px', 
       background: '#c0c0c0',
       fontFamily: 'MS Sans Serif, sans-serif',
-      fontSize: '11px'
+      fontSize: isMobile ? '9px' : '11px'
     }}>
-      <h3>🐍 Snake Game</h3>
-      <div style={{ marginBottom: '10px' }}>
+      <h3 style={{ margin: '0 0 10px 0', fontSize: isMobile ? '10px' : '12px' }}>
+        🐍 Snake Game
+      </h3>
+      <div style={{ marginBottom: '10px', fontSize: isMobile ? '9px' : '11px' }}>
         Score: {score} | {gameOver ? 'Game Over!' : isPaused ? 'Paused' : isPlaying ? 'Playing...' : 'Press Start'}
       </div>
       
@@ -168,21 +207,43 @@ export default function SnakeGame() {
         height={CANVAS_HEIGHT}
         style={{
           border: '1px solid #808080',
-          background: '#000'
+          background: '#000',
+          display: 'block',
+          margin: '0 auto'
         }}
       />
 
       <div style={{ marginTop: '10px' }}>
-        <button className="retro-button" onClick={resetGame}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', justifyContent: 'center' }}>
+          <button className="retro-button" onClick={resetGame} style={{ fontSize: isMobile ? '9px' : '11px' }}>
           {gameOver ? 'Play Again' : 'Start Game'}
         </button>
         {isPlaying && (
-          <button className="retro-button" onClick={pause} style={{ marginLeft: '8px' }}>
+            <button className="retro-button" onClick={pause} style={{ fontSize: isMobile ? '9px' : '11px' }}>
             {isPaused ? 'Resume' : 'Pause'}
           </button>
         )}
-        <div style={{ fontSize: '9px', marginTop: '5px' }}>
-          Arrow keys to move • Space to pause
+        </div>
+
+        {isMobile && (
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            gap: '5px',
+            marginTop: '10px'
+          }}>
+            <DirectionButton direction={{ x: 0, y: -1 }}>↑</DirectionButton>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <DirectionButton direction={{ x: -1, y: 0 }}>←</DirectionButton>
+              <DirectionButton direction={{ x: 1, y: 0 }}>→</DirectionButton>
+            </div>
+            <DirectionButton direction={{ x: 0, y: 1 }}>↓</DirectionButton>
+          </div>
+        )}
+
+        <div style={{ fontSize: isMobile ? '8px' : '9px', marginTop: '10px', textAlign: 'center' }}>
+          {isMobile ? 'Use buttons or arrow keys • Tap pause button' : 'Arrow keys to move • Space to pause'}
         </div>
       </div>
     </div>

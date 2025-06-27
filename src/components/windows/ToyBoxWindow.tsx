@@ -1,6 +1,7 @@
 import { type CSSProperties, useState, useEffect } from 'react'
 import Window95Frame from '../Window95Frame'
 import tamagotchi from '../../assets/legacy/images/tamagotchi.png'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 interface ToyBoxWindowProps {
   title: string
@@ -10,14 +11,13 @@ interface ToyBoxWindowProps {
 }
 
 export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyBoxWindowProps) {
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const [tamagotchiStatus, setTamagotchiStatus] = useState({
     hunger: 80,
     happiness: 75,
     health: 90,
     age: 3
   })
-
-  const [lastFed, setLastFed] = useState(Date.now())
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,7 +38,6 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
       hunger: Math.min(100, prev.hunger + 30),
       happiness: Math.min(100, prev.happiness + 10)
     }))
-    setLastFed(Date.now())
   }
 
   const playWithTamagotchi = () => {
@@ -56,38 +55,38 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
   }
 
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
         w={450}
         h={500}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
-          padding: '16px',
+        padding: isMobile ? '8px' : '16px',
           height: '100%',
           overflow: 'auto',
           background: '#c0c0c0'
         }}>
           <div style={{
             textAlign: 'center',
-            marginBottom: '20px',
-            padding: '12px',
+          marginBottom: isMobile ? '12px' : '20px',
+          padding: isMobile ? '8px' : '12px',
             background: '#ff69b4',
             color: 'white',
             border: '2px inset #c0c0c0'
           }}>
             <h2 style={{
               margin: 0,
-              fontSize: '16px',
+            fontSize: isMobile ? '12px' : '16px',
               fontFamily: 'Press Start 2P, monospace'
             }}>
               🧸 TOY BOX 🧸
             </h2>
             <p style={{
               margin: '8px 0 0 0',
-              fontSize: '11px',
+            fontSize: isMobile ? '9px' : '11px',
               fontFamily: 'MS Sans Serif, sans-serif'
             }}>
               Your Virtual Pet Paradise
@@ -96,15 +95,15 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
 
           {/* Tamagotchi Section */}
           <div style={{
-            padding: '16px',
+          padding: isMobile ? '8px' : '16px',
             background: '#fff',
             border: '2px inset #c0c0c0',
-            marginBottom: '16px',
+          marginBottom: isMobile ? '8px' : '16px',
             textAlign: 'center'
           }}>
             <h3 style={{
               margin: '0 0 12px 0',
-              fontSize: '12px',
+            fontSize: isMobile ? '10px' : '12px',
               fontFamily: 'MS Sans Serif, sans-serif',
               color: '#000080'
             }}>
@@ -113,18 +112,18 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
 
             <div style={{
               display: 'inline-block',
-              padding: '16px',
+            padding: isMobile ? '8px' : '16px',
               background: '#000',
               border: '4px outset #c0c0c0',
               borderRadius: '20px',
-              marginBottom: '16px'
+            marginBottom: isMobile ? '8px' : '16px'
             }}>
               <img 
                 src={tamagotchi} 
                 alt="Tamagotchi"
                 style={{
-                  width: '120px',
-                  height: '120px',
+                width: isMobile ? '80px' : '120px',
+                height: isMobile ? '80px' : '120px',
                   objectFit: 'contain',
                   imageRendering: 'pixelated'
                 }}
@@ -132,13 +131,13 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
             </div>
 
             {/* Status Bars */}
-            <div style={{ marginBottom: '16px' }}>
+          <div style={{ marginBottom: isMobile ? '8px' : '16px' }}>
               {Object.entries(tamagotchiStatus).map(([key, value]) => {
                 if (key === 'age') return null
                 return (
                   <div key={key} style={{ marginBottom: '8px' }}>
                     <div style={{
-                      fontSize: '11px',
+                    fontSize: isMobile ? '9px' : '11px',
                       fontFamily: 'MS Sans Serif, sans-serif',
                       marginBottom: '2px',
                       textAlign: 'left'
@@ -146,11 +145,12 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
                       {key.charAt(0).toUpperCase() + key.slice(1)}: {Math.round(value)}%
                     </div>
                     <div style={{
-                      width: '200px',
+                    width: isMobile ? '150px' : '200px',
                       height: '16px',
                       background: '#808080',
                       border: '1px inset #c0c0c0',
-                      position: 'relative'
+                    position: 'relative',
+                    margin: '0 auto'
                     }}>
                       <div style={{
                         width: `${value}%`,
@@ -164,7 +164,7 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
               })}
               
               <div style={{
-                fontSize: '11px',
+              fontSize: isMobile ? '9px' : '11px',
                 fontFamily: 'MS Sans Serif, sans-serif',
                 marginTop: '8px'
               }}>
@@ -173,12 +173,12 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button
                 onClick={feedTamagotchi}
                 style={{
-                  padding: '6px 12px',
-                  fontSize: '11px',
+                padding: isMobile ? '4px 8px' : '6px 12px',
+                fontSize: isMobile ? '9px' : '11px',
                   fontFamily: 'MS Sans Serif, sans-serif',
                   background: '#c0c0c0',
                   border: '2px outset #c0c0c0',
@@ -190,8 +190,8 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
               <button
                 onClick={playWithTamagotchi}
                 style={{
-                  padding: '6px 12px',
-                  fontSize: '11px',
+                padding: isMobile ? '4px 8px' : '6px 12px',
+                fontSize: isMobile ? '9px' : '11px',
                   fontFamily: 'MS Sans Serif, sans-serif',
                   background: '#c0c0c0',
                   border: '2px outset #c0c0c0',
@@ -205,15 +205,15 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
 
           {/* Other 2000s Toys */}
           <div style={{
-            padding: '12px',
+          padding: isMobile ? '8px' : '12px',
             background: '#ffff80',
             border: '2px inset #c0c0c0',
-            fontSize: '11px',
+          fontSize: isMobile ? '9px' : '11px',
             fontFamily: 'MS Sans Serif, sans-serif'
           }}>
             <h4 style={{
               margin: '0 0 8px 0',
-              fontSize: '12px',
+            fontSize: isMobile ? '10px' : '12px',
               color: '#000080'
             }}>
               🎯 Other 2000s Classics:
@@ -226,6 +226,5 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
           </div>
         </div>
       </Window95Frame>
-    </div>
   )
 } 

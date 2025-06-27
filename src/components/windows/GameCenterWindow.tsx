@@ -1,6 +1,10 @@
-import { type CSSProperties } from 'react'
+import { type CSSProperties, useState } from 'react'
 import Window95Frame from '../Window95Frame'
 import SnakeGame from '../SnakeGame'
+import MinesweeperGame from '../MinesweeperGame'
+import PinballGame from '../PinballGame'
+import PokerGame from '../PokerGame'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 interface GameCenterWindowProps {
   title: string
@@ -9,154 +13,159 @@ interface GameCenterWindowProps {
   style: CSSProperties
 }
 
+type GameType = 'Snake' | 'Minesweeper' | 'Pinball' | 'Poker'
+
 export default function GameCenterWindow({ title, onClose, onMinimize, style }: GameCenterWindowProps) {
-  const games = [
-    { name: 'Solitaire', icon: '🃏', status: 'Available' },
-    { name: 'Minesweeper', icon: '💣', status: 'Available' },
-    { name: 'Pinball', icon: '🎯', status: 'Available' },
-    { name: 'Hearts', icon: '❤️', status: 'Available' }
-  ]
+  const isMobile = useMediaQuery('(max-width: 640px)')
+  const [selectedGame, setSelectedGame] = useState<GameType | null>(null)
+  
+  const games: GameType[] = ['Snake', 'Minesweeper', 'Pinball', 'Poker']
+
+  const renderGameContent = () => {
+    switch (selectedGame) {
+      case 'Snake':
+        return <SnakeGame />
+      case 'Minesweeper':
+        return <MinesweeperGame />
+      case 'Pinball':
+        return <PinballGame />
+      case 'Poker':
+        return <PokerGame />
+      default:
+        return null
+    }
+  }
 
   return (
-    <div style={style}>
       <Window95Frame 
         title={title}
-        w={550}
-        h={600}
+        w={800}
+        h={700}
         onClose={onClose}
         onMinimize={onMinimize}
+      {...style}
       >
         <div style={{ 
-          padding: '16px',
+        padding: isMobile ? '8px' : '16px',
           height: '100%',
           overflow: 'auto',
           background: '#c0c0c0'
         }}>
+        {!selectedGame ? (
+          <>
           <div style={{
             textAlign: 'center',
-            marginBottom: '20px',
-            padding: '12px',
+              marginBottom: isMobile ? '12px' : '24px',
+              padding: isMobile ? '8px' : '16px',
             background: '#000080',
             color: 'white',
             border: '2px inset #c0c0c0'
           }}>
             <h2 style={{
               margin: 0,
-              fontSize: '16px',
+                fontSize: isMobile ? '12px' : '24px',
               fontFamily: 'Press Start 2P, monospace'
             }}>
               🎮 GAME CENTER 🎮
             </h2>
             <p style={{
               margin: '8px 0 0 0',
-              fontSize: '11px',
+                fontSize: isMobile ? '9px' : '14px',
               fontFamily: 'MS Sans Serif, sans-serif'
             }}>
-              Classic Windows Games
+                Classic Windows Games - Click to Play!
             </p>
           </div>
 
-          {/* Snake Game */}
-          <div style={{
-            marginBottom: '20px',
-            padding: '16px',
-            background: '#fff',
-            border: '2px inset #c0c0c0'
-          }}>
-            <h3 style={{
-              margin: '0 0 12px 0',
-              fontSize: '12px',
-              fontFamily: 'MS Sans Serif, sans-serif',
-              color: '#000080',
-              textAlign: 'center'
-            }}>
-              🐍 Snake Game
-            </h3>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <SnakeGame />
-            </div>
-          </div>
-
-          {/* Other Games */}
-          <div style={{
-            padding: '12px',
-            background: '#fff',
-            border: '2px inset #c0c0c0',
-            marginBottom: '16px'
-          }}>
-            <h3 style={{
-              margin: '0 0 12px 0',
-              fontSize: '12px',
-              fontFamily: 'MS Sans Serif, sans-serif',
-              color: '#000080'
-            }}>
-              🎯 Other Games
-            </h3>
+            {/* Game Grid */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '8px'
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+              gap: isMobile ? '8px' : '16px',
+              padding: isMobile ? '8px' : '16px',
+              background: '#fff',
+              border: '2px inset #c0c0c0'
             }}>
-              {games.map((game, index) => (
+              {games.map((game) => (
                 <button
-                  key={index}
+                  key={game}
+                  onClick={() => setSelectedGame(game)}
                   style={{
-                    padding: '12px',
+                    padding: isMobile ? '12px' : '20px',
                     background: '#c0c0c0',
                     border: '2px outset #c0c0c0',
-                    fontSize: '11px',
+                    fontSize: isMobile ? '10px' : '16px',
                     fontFamily: 'MS Sans Serif, sans-serif',
                     cursor: 'pointer',
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
                     gap: '8px'
                   }}
-                  onMouseDown={(e) => {
-                    e.currentTarget.style.border = '2px inset #c0c0c0'
-                  }}
-                  onMouseUp={(e) => {
-                    e.currentTarget.style.border = '2px outset #c0c0c0'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.border = '2px outset #c0c0c0'
-                  }}
                 >
-                  <span style={{ fontSize: '16px' }}>{game.icon}</span>
-                  <div>
-                    <div style={{ fontWeight: 'bold' }}>{game.name}</div>
-                    <div style={{ fontSize: '9px', color: '#008000' }}>
-                      {game.status}
-                    </div>
-                  </div>
+                  <span style={{ fontSize: isMobile ? '16px' : '24px' }}>
+                    {game === 'Snake' ? '🐍' :
+                     game === 'Minesweeper' ? '💣' :
+                     game === 'Pinball' ? '🎯' :
+                     game === 'Poker' ? '🃏' : '🎮'}
+                  </span>
+                  {game}
                 </button>
               ))}
             </div>
+          </>
+        ) : (
+          <>
+            {/* Game Header with Back Button */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: isMobile ? '12px' : '24px',
+              padding: isMobile ? '8px' : '16px',
+              background: '#000080',
+              color: 'white',
+              border: '2px inset #c0c0c0'
+            }}>
+              <button
+                onClick={() => setSelectedGame(null)}
+                style={{
+                  padding: isMobile ? '4px 8px' : '8px 16px',
+                  background: '#c0c0c0',
+                  border: '2px outset #c0c0c0',
+                  fontSize: isMobile ? '8px' : '14px',
+                  fontFamily: 'MS Sans Serif, sans-serif',
+                  cursor: 'pointer',
+                  color: '#000000'
+                }}
+              >
+                ← Back
+              </button>
+              <h2 style={{
+                margin: 0,
+                fontSize: isMobile ? '12px' : '24px',
+                fontFamily: 'Press Start 2P, monospace'
+              }}>
+                🎮 {selectedGame} 🎮
+              </h2>
+              <div style={{ width: isMobile ? '60px' : '100px' }}></div>
           </div>
 
-          {/* Gaming Nostalgia */}
+            {/* Game Content */}
           <div style={{
-            padding: '12px',
-            background: '#ffff80',
+              padding: isMobile ? '8px' : '16px',
+              background: '#fff',
             border: '2px inset #c0c0c0',
-            fontSize: '11px',
-            fontFamily: 'MS Sans Serif, sans-serif'
-          }}>
-            <h4 style={{
-              margin: '0 0 8px 0',
-              fontSize: '12px',
-              color: '#000080'
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: isMobile ? '300px' : '500px'
             }}>
-              🕹️ 2000s Gaming Memories:
-            </h4>
-            <div>• Spending hours on Minesweeper during "work"</div>
-            <div>• The satisfying bounce of 3D Pinball</div>
-            <div>• Getting a high score in Snake on your Nokia</div>
-            <div>• Solitaire was the original time-waster</div>
-            <div>• LAN parties with Counter-Strike 1.6</div>
-            <div>• Dial-up lag ruining your gaming session</div>
+              {renderGameContent()}
           </div>
+          </>
+        )}
         </div>
       </Window95Frame>
-    </div>
   )
 } 

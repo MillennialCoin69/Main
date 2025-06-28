@@ -254,19 +254,22 @@ body {
     bottom: 80px !important;
     left: 0 !important;
     right: 0 !important;
-    max-height: 180px !important;
+    max-height: 140px !important;
+    height: 140px !important;
     background: rgba(0, 0, 0, 0.3) !important;
     backdrop-filter: blur(10px) !important;
     border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     flex-grow: 0 !important;
-    gap: 6px !important;
+    gap: 4px !important;
+    justify-content: space-evenly !important;
+    align-content: flex-start !important;
   }
   
-  /* Make all mobile icons uniform size */
+  /* Make all mobile icons uniform size - smaller to fit in 2 rows */
   .mobile-icons-grid .desktop-icon {
-    width: 65px !important;
-    height: 65px !important;
-    margin: 1px !important;
+    width: 55px !important;
+    height: 55px !important;
+    margin: 2px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -274,30 +277,30 @@ body {
   }
   
   .mobile-icons-grid .desktop-icon img {
-    width: 36px !important;
-    height: 36px !important;
+    width: 28px !important;
+    height: 28px !important;
     object-fit: cover !important;
   }
   
   .mobile-icons-grid .desktop-icon .icon-label {
-    font-size: 9px !important;
-    margin-top: 3px !important;
-    line-height: 1.1 !important;
-    max-width: 60px !important;
+    font-size: 8px !important;
+    margin-top: 2px !important;
+    line-height: 1.0 !important;
+    max-width: 50px !important;
     word-wrap: break-word !important;
     text-align: center !important;
   }
   
   /* Ensure desktop logo has enough space and is positioned higher */
   .desktop-logo-container {
-    top: 35% !important;
+    top: 25% !important;
     transform: translate(-50%, -50%) !important;
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 0 15px !important;
+    padding: 0 10px !important;
     box-sizing: border-box !important;
   }
 
@@ -305,6 +308,33 @@ body {
   .contract-loaded::-webkit-scrollbar,
   .contract-loading::-webkit-scrollbar {
     display: none !important;
+  }
+  
+  /* Mobile icons grid scrolling - visible but subtle */
+  .mobile-icons-grid::-webkit-scrollbar {
+    width: 4px !important;
+  }
+  
+  .mobile-icons-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  .mobile-icons-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 2px !important;
+  }
+  
+  /* Optimize mobile icon container styling */
+  .mobile-icons-grid .desktop-icon div:first-child {
+    border: 1px outset #c0c0c0 !important;
+    background: #c0c0c0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 2px !important;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2) !important;
   }
 }
 

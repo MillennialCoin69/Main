@@ -25,6 +25,7 @@ export default function DesktopIcon({ title, icon, position, onClick, isRightSid
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
         cursor: 'pointer',
         userSelect: 'none',
         padding: '4px',

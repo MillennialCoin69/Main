@@ -8,8 +8,14 @@ export default function DesktopLogo() {
   const contractAddress = 'vv96jGJhGEqq5GU6q6zqpPrGMayZpGxQ35rrGEkpump'
 
   useEffect(() => {
-    // Check if mobile
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+    // Check if mobile and if we're in a constrained environment like Telegram
+    const checkMobile = () => {
+      const width = window.innerWidth
+      const height = window.innerHeight
+      const isNarrow = width <= 768
+      const isConstrained = height <= 800 // Detect constrained mobile environments
+      setIsMobile(isNarrow || isConstrained)
+    }
     checkMobile()
     window.addEventListener('resize', checkMobile)
     
@@ -49,7 +55,7 @@ export default function DesktopLogo() {
       className="desktop-logo-container"
       style={{
         position: 'absolute',
-        top: '50%',
+        top: isMobile ? '25%' : '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         textAlign: 'center',
@@ -63,8 +69,8 @@ export default function DesktopLogo() {
       }}>
       {/* Portal Effect Container */}
       <div style={{
-        width: isMobile ? '585px' : '500px',
-        height: isMobile ? '585px' : '500px',
+        width: isMobile ? '450px' : '500px',
+        height: isMobile ? '450px' : '500px',
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
@@ -97,8 +103,8 @@ export default function DesktopLogo() {
         
         {/* Centered Video */}
         <div style={{
-          width: isMobile ? '416px' : '300px',
-          height: isMobile ? '416px' : '300px',
+          width: isMobile ? '350px' : '300px',
+          height: isMobile ? '350px' : '300px',
           borderRadius: '50%',
           overflow: 'hidden',
           border: '6px solid rgba(255, 255, 255, 0.1)',
@@ -130,18 +136,18 @@ export default function DesktopLogo() {
         className={isLoaded ? 'contract-loaded' : 'contract-loading'}
         onClick={handleCopy}
         style={{
-          marginTop: isMobile ? '40px' : '30px',
-          padding: isMobile ? '26px 36px' : '16px 24px',
+          marginTop: isMobile ? '15px' : '30px',
+          padding: isMobile ? '15px 24px' : '16px 24px',
           background: 'linear-gradient(145deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 20, 0.95))',
-          border: '3px solid #00ffff',
+          border: '4px solid #00ffff',
           borderRadius: '8px',
-          fontSize: isMobile ? '25px' : '16px',
+          fontSize: isMobile ? '19px' : '16px',
           fontFamily: 'Courier New, monospace',
           color: '#00ffff',
           cursor: 'pointer',
           pointerEvents: 'auto',
           transition: 'all 0.3s ease',
-          maxWidth: isMobile ? '780px' : '500px',
+          maxWidth: isMobile ? '95vw' : '500px',
           wordBreak: 'keep-all',
           whiteSpace: 'nowrap',
           overflowX: 'auto',
@@ -172,27 +178,28 @@ export default function DesktopLogo() {
             color: '#00ff00', 
             fontWeight: 'bold',
             textShadow: '0 0 20px #00ff00',
-            fontSize: isMobile ? '29px' : '18px'
+            fontSize: isMobile ? '22px' : '18px'
           }}>
             ✓ COPIED TO CLIPBOARD!
           </div>
         ) : (
           <>
             <div style={{ 
-              fontSize: isMobile ? '22px' : '14px', 
-              marginBottom: '10px', 
+              fontSize: isMobile ? '15px' : '14px', 
+              marginBottom: '8px', 
               opacity: 0.9,
               fontWeight: 'bold',
-              letterSpacing: '2px'
+              letterSpacing: '1px'
             }}>
               📋 CONTRACT ADDRESS (CLICK TO COPY)
             </div>
             <div style={{ 
               fontWeight: 'bold',
-              letterSpacing: '1px',
+              letterSpacing: '0.5px',
               lineHeight: '1.4',
               whiteSpace: 'nowrap',
-              overflowX: 'auto'
+              overflowX: 'auto',
+              wordBreak: 'normal'
             }}>
               {contractAddress}
             </div>
@@ -251,6 +258,11 @@ export default function DesktopLogo() {
         .contract-loaded {
           animation: retro90sSlide 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
                      retroBorderPulse 3s ease-in-out infinite 1.5s;
+        }
+        
+        .contract-loaded::-webkit-scrollbar,
+        .contract-loading::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
     </div>

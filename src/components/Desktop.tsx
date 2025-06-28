@@ -226,17 +226,19 @@ export default function Desktop({ onBSOD }: DesktopProps) {
           right: '0',
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '8px',
-          padding: '10px',
-          maxHeight: '180px',
-          overflowY: 'auto',
+          justifyContent: 'space-evenly',
+          alignContent: 'flex-start',
+          gap: '4px',
+          padding: '8px',
+          height: '140px',
+          maxHeight: '140px',
+          overflowY: 'auto', // Scrollable in case larger CA pushes content down
           background: 'rgba(0, 0, 0, 0.3)',
           backdropFilter: 'blur(10px)',
           borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-          // Hide scrollbar for aesthetics
-          msOverflowStyle: 'none',
-          scrollbarWidth: 'none'
+          // Subtle scrolling for overflow
+          msOverflowStyle: 'auto',
+          scrollbarWidth: 'thin'
         }}
       >
         {desktopIcons.map(icon => (

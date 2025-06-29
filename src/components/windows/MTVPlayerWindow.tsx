@@ -14,16 +14,52 @@ interface MTVPlayerWindowProps {
 export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: MTVPlayerWindowProps) {
   const isMobile = useMediaQuery('(max-width: 640px)')
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+  const [volume, setVolume] = useState(0.7)
   
-  const handlePlayPause = () => {
+  const handlePlayPause = async () => {
     const video = document.getElementById('mtv-video') as HTMLVideoElement
     if (video) {
       if (video.paused) {
-        video.play()
-        setIsPlaying(true)
+        try {
+          // Unmute when user intentionally plays video
+          if (isMuted) {
+            video.muted = false
+            setIsMuted(false)
+          }
+          await video.play()
+          setIsPlaying(true)
+        } catch (error) {
+          console.log('Autoplay prevented:', error)
+          // If autoplay fails, still show as playing but keep muted
+          setIsPlaying(true)
+        }
       } else {
         video.pause()
         setIsPlaying(false)
+      }
+    }
+  }
+
+  const handleMuteToggle = () => {
+    const video = document.getElementById('mtv-video') as HTMLVideoElement
+    if (video) {
+      video.muted = !video.muted
+      setIsMuted(video.muted)
+    }
+  }
+
+  const handleVolumeChange = (newVolume: number) => {
+    const video = document.getElementById('mtv-video') as HTMLVideoElement
+    if (video) {
+      video.volume = newVolume
+      setVolume(newVolume)
+      if (newVolume === 0) {
+        video.muted = true
+        setIsMuted(true)
+      } else if (video.muted) {
+        video.muted = false
+        setIsMuted(false)
       }
     }
   }
@@ -109,9 +145,15 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
                   filter: 'contrast(1.1) brightness(0.9)'
                 }}
                 loop
-                muted
+                muted={isMuted}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
+                onLoadedData={() => {
+                  const video = document.getElementById('mtv-video') as HTMLVideoElement
+                  if (video) {
+                    video.volume = volume
+                  }
+                }}
               />
               
               {/* CRT Scanlines Effect */}
@@ -152,43 +194,103 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
           {/* TV Controls */}
           <div style={{
             display: 'flex',
-            justifyContent: 'center',
-            gap: isMobile ? '8px' : '12px',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: isMobile ? '6px' : '8px',
             marginBottom: isMobile ? '8px' : '12px'
           }}>
-            <button
-              onClick={handlePlayPause}
-              style={{
-                background: 'linear-gradient(145deg, #555, #333)',
-                border: '2px outset #666',
-                borderRadius: '50%',
-                width: isMobile ? '32px' : '40px',
-                height: isMobile ? '32px' : '40px',
-                color: '#fff',
-                fontSize: isMobile ? '12px' : '16px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              {isPlaying ? '⏸️' : '▶️'}
-            </button>
-            
-            <button
-              style={{
-                background: 'linear-gradient(145deg, #555, #333)',
-                border: '2px outset #666',
-                borderRadius: '50%',
-                width: isMobile ? '32px' : '40px',
-                height: isMobile ? '32px' : '40px',
-                color: '#fff',
-                fontSize: isMobile ? '12px' : '16px',
-                cursor: 'pointer'
-              }}
-            >
-              🔊
-            </button>
+            {/* Play/Pause and Mute Buttons */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: isMobile ? '8px' : '12px'
+            }}>
+              <button
+                onClick={handlePlayPause}
+                style={{
+                  background: 'linear-gradient(145deg, #555, #333)',
+                  border: '2px outset #666',
+                  borderRadius: '50%',
+                  width: isMobile ? '32px' : '40px',
+                  height: isMobile ? '32px' : '40px',
+                  color: '#fff',
+                  fontSize: isMobile ? '12px' : '16px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                title={isPlaying ? 'Pause' : 'Play'}
+              >
+                {isPlaying ? '⏸️' : '▶️'}
+              </button>
+              
+              <button
+                onClick={handleMuteToggle}
+                style={{
+                  background: 'linear-gradient(145deg, #555, #333)',
+                  border: '2px outset #666',
+                  borderRadius: '50%',
+                  width: isMobile ? '32px' : '40px',
+                  height: isMobile ? '32px' : '40px',
+                  color: '#fff',
+                  fontSize: isMobile ? '12px' : '16px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                title={isMuted ? 'Unmute' : 'Mute'}
+              >
+                {isMuted ? '🔇' : '🔊'}
+              </button>
+            </div>
+
+            {/* Volume Slider */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              width: '100%',
+              maxWidth: '200px'
+            }}>
+              <span style={{ 
+                color: '#ccc', 
+                fontSize: isMobile ? '10px' : '12px',
+                minWidth: '20px'
+              }}>
+                🔉
+              </span>
+                             <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={isMuted ? 0 : volume}
+                onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+                style={{
+                  flex: 1,
+                  height: '8px',
+                  borderRadius: '4px',
+                  background: 'linear-gradient(to right, #ff6b35 0%, #ff6b35 ' + 
+                    Math.round((isMuted ? 0 : volume) * 100) + '%, #333 ' + 
+                    Math.round((isMuted ? 0 : volume) * 100) + '%, #333 100%)',
+                  outline: 'none',
+                  cursor: 'pointer',
+                  border: '1px inset #666',
+                  WebkitAppearance: 'none',
+                  appearance: 'none'
+                }}
+              />
+              <span style={{ 
+                color: '#ccc', 
+                fontSize: isMobile ? '8px' : '10px',
+                minWidth: '25px',
+                textAlign: 'right'
+              }}>
+                {Math.round((isMuted ? 0 : volume) * 100)}%
+              </span>
+            </div>
           </div>
 
           {/* Now Playing Info */}
@@ -206,14 +308,24 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
               fontWeight: 'bold',
               marginBottom: '2px'
             }}>
-              NOW PLAYING
+              NOW PLAYING {isPlaying && !isMuted && '🔊'}
             </div>
             <div style={{
               color: '#fff',
-              fontSize: isMobile ? '8px' : '10px'
+              fontSize: isMobile ? '8px' : '10px',
+              marginBottom: '4px'
             }}>
               Eiffel 65 - I'm Blue (Da Ba Dee)
             </div>
+            {isMuted && (
+              <div style={{
+                color: '#ffaa00',
+                fontSize: isMobile ? '7px' : '8px',
+                fontStyle: 'italic'
+              }}>
+                🔇 Click speaker button to unmute
+              </div>
+            )}
           </div>
 
           {/* Retro Info */}
@@ -235,6 +347,14 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
             </div>
             <div style={{ marginTop: '4px', fontSize: isMobile ? '7px' : '8px', opacity: 0.8 }}>
               "I want my MTV... and my $MILLENNIAL!"
+            </div>
+            <div style={{ 
+              marginTop: '6px', 
+              fontSize: isMobile ? '6px' : '7px', 
+              color: '#00ff00',
+              fontWeight: 'bold'
+            }}>
+              🔊 Full Audio Support • Use Volume Controls Above
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import DesktopIcon from './DesktopIcon'
 import DesktopLogo from './DesktopLogo'
 import Taskbar from './Taskbar'
 import StartMenu from './StartMenu'
+import RickRollButton from './RickRollButton'
 import MemeCenterWindow from './windows/MemeCenterWindow'
 import ToyBoxWindow from './windows/ToyBoxWindow'
 import MTVPlayerWindow from './windows/MTVPlayerWindow'
@@ -262,6 +263,7 @@ export default function Desktop({ onBSOD }: DesktopProps) {
         onStartClick={() => setShowStartMenu(!showStartMenu)}
         onWindowClick={restoreWindow}
       />
+      <RickRollButton />
     </div>
   );
 
@@ -303,6 +305,9 @@ export default function Desktop({ onBSOD }: DesktopProps) {
         onStartClick={() => setShowStartMenu(!showStartMenu)}
         onWindowClick={restoreWindow}
       />
+
+      {/* Rick Roll Button */}
+      <RickRollButton />
     </div>
   )
 

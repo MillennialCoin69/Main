@@ -2,7 +2,7 @@ import { type CSSProperties, useState } from 'react'
 import Window95Frame from '../Window95Frame'
 import SnakeGame from '../SnakeGame'
 import MinesweeperGame from '../MinesweeperGame'
-import PinballGame from '../PinballGame'
+import SpaceCadetPinball from '../SpaceCadetPinball'
 import PokerGame from '../PokerGame'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 
@@ -13,13 +13,13 @@ interface GameCenterWindowProps {
   style: CSSProperties
 }
 
-type GameType = 'Snake' | 'Minesweeper' | 'Pinball' | 'Poker'
+type GameType = 'Snake' | 'Minesweeper' | 'Space Cadet' | 'Poker'
 
 export default function GameCenterWindow({ title, onClose, onMinimize, style }: GameCenterWindowProps) {
   const isMobile = useMediaQuery('(max-width: 640px)')
   const [selectedGame, setSelectedGame] = useState<GameType | null>(null)
   
-  const games: GameType[] = ['Snake', 'Minesweeper', 'Pinball', 'Poker']
+  const games: GameType[] = ['Snake', 'Minesweeper', 'Space Cadet', 'Poker']
 
   const renderGameContent = () => {
     switch (selectedGame) {
@@ -27,8 +27,8 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
         return <SnakeGame />
       case 'Minesweeper':
         return <MinesweeperGame />
-      case 'Pinball':
-        return <PinballGame />
+      case 'Space Cadet':
+        return <SpaceCadetPinball />
       case 'Poker':
         return <PokerGame />
       default:
@@ -39,8 +39,8 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
   return (
       <Window95Frame 
         title={title}
-        w={800}
-        h={700}
+        w={selectedGame === 'Space Cadet' ? 900 : 800}
+        h={selectedGame === 'Space Cadet' ? 800 : 700}
         onClose={onClose}
         onMinimize={onMinimize}
       {...style}
@@ -106,7 +106,7 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
                   <span style={{ fontSize: isMobile ? '16px' : '24px' }}>
                     {game === 'Snake' ? '🐍' :
                      game === 'Minesweeper' ? '💣' :
-                     game === 'Pinball' ? '🎯' :
+                     game === 'Space Cadet' ? '🚀' :
                      game === 'Poker' ? '🃏' : '🎮'}
                   </span>
                   {game}
@@ -153,13 +153,22 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
 
             {/* Game Content */}
           <div style={{
-              padding: isMobile ? '8px' : '16px',
+              padding: selectedGame === 'Space Cadet' ? '2px' : (isMobile ? '8px' : '16px'),
               background: '#fff',
             border: '2px inset #c0c0c0',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center',
-              minHeight: isMobile ? '300px' : '500px'
+              alignItems: selectedGame === 'Space Cadet' ? 'flex-start' : 'center',
+              minHeight: selectedGame === 'Space Cadet' 
+                ? (isMobile ? 'calc(100vh - 200px)' : '800px') 
+                : (isMobile ? '300px' : '500px'),
+              maxHeight: selectedGame === 'Space Cadet' 
+                ? (isMobile ? 'calc(100vh - 150px)' : '90vh') 
+                : 'none',
+              width: '100%',
+              overflow: selectedGame === 'Space Cadet' ? (isMobile ? 'hidden' : 'visible') : 'auto',
+              position: 'relative',
+              zIndex: 1
             }}>
               {renderGameContent()}
           </div>

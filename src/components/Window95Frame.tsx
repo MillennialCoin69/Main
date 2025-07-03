@@ -11,6 +11,7 @@ interface Window95FrameProps {
   onClose?: () => void
   onMinimize?: () => void
   onMaximize?: () => void
+  style?: React.CSSProperties
 }
 
 export default function Window95Frame({ 
@@ -21,7 +22,8 @@ export default function Window95Frame({
   defaultPos = { x: 0, y: 0 },
   onClose,
   onMinimize,
-  onMaximize 
+  onMaximize,
+  style 
 }: Window95FrameProps) {
   const isMobile = useMediaQuery('(max-width: 640px)')
   const [isMaximized, setIsMaximized] = useState(!isMobile) // Start maximized on desktop
@@ -62,7 +64,7 @@ export default function Window95Frame({
 
   return (
     <Window
-      style={windowStyle}
+      style={{...windowStyle, ...style}}
       className="window95-frame"
     >
       <WindowHeader 

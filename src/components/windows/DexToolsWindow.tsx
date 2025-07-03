@@ -17,7 +17,7 @@ export default function DexToolsWindow({ title, onClose, onMinimize, style }: De
         h={600}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
           height: '100%',

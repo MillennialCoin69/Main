@@ -17,7 +17,7 @@ export default function DexScreenerWindow({ title, onClose, onMinimize, style }:
         h={600}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
           height: '100%',

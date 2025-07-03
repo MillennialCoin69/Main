@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 
-export default function RickRollButton() {
+interface RickRollButtonProps {
+  hideWhenWindowsOpen?: boolean
+}
+
+export default function RickRollButton({ hideWhenWindowsOpen = false }: RickRollButtonProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [isPulsing, setIsPulsing] = useState(true)
   const [showSparkles, setShowSparkles] = useState(false)
@@ -89,7 +93,7 @@ export default function RickRollButton() {
 
   const handleClick = () => {
     // Open Rick Astley's "Never Gonna Give You Up" in a new tab
-    window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')
+    window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0', '_blank')
   }
 
   const handleMouseEnter = () => {
@@ -110,6 +114,11 @@ export default function RickRollButton() {
         y: Math.max(-2.5, Math.min(2.5, prevVel.y * 0.7))
       }))
     }, 1000)
+  }
+
+  // Hide button when windows are open
+  if (hideWhenWindowsOpen) {
+    return null
   }
 
   return (

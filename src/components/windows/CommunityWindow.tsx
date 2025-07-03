@@ -17,7 +17,7 @@ export default function CommunityWindow({ title, onClose, onMinimize, style }: C
         h={550}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
           height: '100%',

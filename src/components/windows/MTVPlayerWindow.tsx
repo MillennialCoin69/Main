@@ -2,6 +2,13 @@ import { type CSSProperties, useState } from 'react'
 import Window95Frame from '../Window95Frame'
 import mtvLogo from '../../assets/legacy/images/MTV.png'
 import eiffel65Video from '../../assets/legacy/images/eiffel65-blue-compressed.mp4'
+import backstreetBoysVideo from '../../assets/legacy/images/Backstreet Boys - I Want It That Way (Official HD Video)-small.mp4'
+import britneyVideo from '../../assets/legacy/images/Britney Spears - ...Baby One More Time (Official Video)-small.mp4'
+import christinaVideo from '../../assets/legacy/images/Christina Aguilera - Dirrty (Official HD Video) ft. Redman-small.mp4'
+import crazyFrogVideo from '../../assets/legacy/images/Crazy Frog - Axel F (Official Video)-small.mp4'
+import eminemVideo from '../../assets/legacy/images/Eminem - The Real Slim Shady (Official Video - Clean Version)-small.mp4'
+import outkastVideo from '../../assets/legacy/images/Outkast - Hey Ya! (Official HD Video)-small.mp4'
+import blinkVideo from '../../assets/legacy/images/blink-182 - All The Small Things (Official Music Video)-small.mp4'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 interface MTVPlayerWindowProps {
@@ -11,12 +18,87 @@ interface MTVPlayerWindowProps {
   style: CSSProperties
 }
 
+const videoPlaylist = [
+  {
+    src: eiffel65Video,
+    title: "Eiffel 65 - I'm Blue (Da Ba Dee)",
+    artist: "Eiffel 65"
+  },
+  {
+    src: backstreetBoysVideo,
+    title: "I Want It That Way",
+    artist: "Backstreet Boys"
+  },
+  {
+    src: britneyVideo,
+    title: "Hit Me Baby One More Time",
+    artist: "Britney Spears"
+  },
+  {
+    src: christinaVideo,
+    title: "Dirrty",
+    artist: "Christina Aguilera ft. Redman"
+  },
+  {
+    src: crazyFrogVideo,
+    title: "Axel F",
+    artist: "Crazy Frog"
+  },
+  {
+    src: eminemVideo,
+    title: "The Real Slim Shady",
+    artist: "Eminem"
+  },
+  {
+    src: outkastVideo,
+    title: "Hey Ya!",
+    artist: "Outkast"
+  },
+  {
+    src: blinkVideo,
+    title: "All The Small Things",
+    artist: "blink-182"
+  }
+]
+
 export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: MTVPlayerWindowProps) {
   const isMobile = useMediaQuery('(max-width: 640px)')
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
   const [volume, setVolume] = useState(0.7)
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   
+  const currentVideo = videoPlaylist[currentVideoIndex]
+
+  const handleVideoSelect = (index: number) => {
+    const video = document.getElementById('mtv-video') as HTMLVideoElement
+    if (video) {
+      video.pause()
+      setIsPlaying(false)
+    }
+    setCurrentVideoIndex(index)
+    
+    // Auto-play the selected video after a short delay to ensure video source is loaded
+    setTimeout(async () => {
+      const newVideo = document.getElementById('mtv-video') as HTMLVideoElement
+      if (newVideo) {
+        try {
+          // Unmute when user intentionally selects a video
+          if (isMuted) {
+            newVideo.muted = false
+            setIsMuted(false)
+          }
+          await newVideo.play()
+          setIsPlaying(true)
+        } catch (error) {
+          console.log('Autoplay prevented:', error)
+          // If autoplay fails, still show as playing but keep muted
+          setIsPlaying(true)
+        }
+      }
+    }, 100)
+  }
+
   const handlePlayPause = async () => {
     const video = document.getElementById('mtv-video') as HTMLVideoElement
     if (video) {
@@ -71,7 +153,7 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
       h={isMobile ? 450 : 600}
       onClose={onClose}
       onMinimize={onMinimize}
-      {...style}
+      style={style}
     >
       <div style={{ 
         padding: isMobile ? '8px' : '12px',
@@ -137,7 +219,7 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
             }}>
               <video
                 id="mtv-video"
-                src={eiffel65Video}
+                src={currentVideo.src}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -315,7 +397,7 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
               fontSize: isMobile ? '8px' : '10px',
               marginBottom: '4px'
             }}>
-              Eiffel 65 - I'm Blue (Da Ba Dee)
+              {currentVideo.title} - {currentVideo.artist}
             </div>
             {isMuted && (
               <div style={{
@@ -326,6 +408,72 @@ export default function MTVPlayerWindow({ title, onClose, onMinimize, style }: M
                 🔇 Click speaker button to unmute
               </div>
             )}
+          </div>
+
+          {/* Playlist */}
+          <div style={{
+            background: 'rgba(0,0,0,0.4)',
+            border: '1px solid #444',
+            borderRadius: '4px',
+            padding: isMobile ? '6px' : '8px',
+            marginBottom: isMobile ? '8px' : '12px',
+            maxHeight: isMobile ? '120px' : '150px',
+            overflowY: 'auto'
+          }}>
+            <div style={{
+              color: '#ff6b35',
+              fontSize: isMobile ? '8px' : '10px',
+              fontWeight: 'bold',
+              marginBottom: '6px',
+              textAlign: 'center'
+            }}>
+              📺 VIDEO PLAYLIST
+            </div>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '2px'
+            }}>
+              {videoPlaylist.map((video, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleVideoSelect(index)}
+                  style={{
+                    padding: isMobile ? '4px' : '6px',
+                    background: index === currentVideoIndex ? 'rgba(255, 107, 53, 0.3)' : 'rgba(255, 255, 255, 0.05)',
+                    border: index === currentVideoIndex ? '1px solid #ff6b35' : '1px solid #333',
+                    borderRadius: '2px',
+                    cursor: 'pointer',
+                    fontSize: isMobile ? '7px' : '8px',
+                    color: index === currentVideoIndex ? '#fff' : '#ccc',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (index !== currentVideoIndex) {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (index !== currentVideoIndex) {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
+                    }
+                  }}
+                >
+                  <span style={{ minWidth: '12px' }}>
+                    {index === currentVideoIndex ? '▶️' : '📹'}
+                  </span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 'bold' }}>{video.title}</div>
+                    <div style={{ fontSize: isMobile ? '6px' : '7px', opacity: 0.8 }}>
+                      {video.artist}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Retro Info */}

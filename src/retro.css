@@ -169,6 +169,42 @@ body {
   image-rendering: crisp-edges;
 }
 
+/* Mobile Browser specific adjustments */
+.mobile-browser .mobile-icons-grid {
+  bottom: 120px !important; /* Extra space for mobile browser UI */
+  padding-bottom: 10px !important;
+}
+
+.mobile-browser .taskbar {
+  bottom: 0 !important;
+  z-index: 10001 !important; /* Ensure taskbar stays on top */
+}
+
+.mobile-browser .desktop-logo-container {
+  top: 20% !important; /* Move slightly higher for mobile browsers */
+}
+
+/* Fallback for CSS-only detection */
+@media (max-width: 768px) and (display-mode: browser) {
+  .mobile-icons-grid {
+    bottom: 120px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
+/* Additional safety for Chrome mobile and other browsers */
+@media (max-width: 768px) and (min-height: 500px) {
+  .mobile-desktop .mobile-icons-grid {
+    margin-bottom: 20px !important;
+  }
+  
+  /* Ensure proper spacing in mobile browsers */
+  body.mobile-browser .mobile-icons-grid {
+    bottom: 120px !important;
+    margin-bottom: 0 !important;
+  }
+}
+
 /* Mobile responsive */
 @media (max-width: 640px) {
   body {

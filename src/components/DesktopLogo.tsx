@@ -15,6 +15,8 @@ export default function DesktopLogo() {
       const isNarrow = width <= 768
       const isConstrained = height <= 800 // Detect constrained mobile environments
       setIsMobile(isNarrow || isConstrained)
+      
+
     }
     checkMobile()
     window.addEventListener('resize', checkMobile)

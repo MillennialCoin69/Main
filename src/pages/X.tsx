@@ -26,7 +26,7 @@ export default function X() {
           </a>
         </div>
         <div style={{ fontSize: '9px', color: '#666' }}>
-          Remember when it was called Twitter? Pepperidge Farm remembers.
+          i'm old enough to remember when WWE was WWF and X was Twitter!
         </div>
       </div>
     </div>

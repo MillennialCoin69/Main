@@ -17,7 +17,7 @@ export default function HomeWindow({ title, onClose, onMinimize, style }: HomeWi
         h={600}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
           height: '100%',

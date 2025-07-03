@@ -1,6 +1,14 @@
 import { type CSSProperties } from 'react'
 import Window95Frame from '../Window95Frame'
 import badLuckBrian from '../../assets/legacy/images/Bad_Luck_Brian.webp'
+import dicksOutForHarambe from '../../assets/legacy/images/dicks_out_for_harambe-Harambe.webp'
+import feelsGoodMan from '../../assets/legacy/images/feels_good_man-Pepe_the_Frog.webp'
+import millennialSelfDefense from '../../assets/legacy/images/millennial_self_defense_101-Star_Wars_Kid.webp'
+import nothingBetterThanRickRoll from '../../assets/legacy/images/Nothing_Better_than_a_classic_rick_roll.webp'
+import numaNuma from '../../assets/legacy/images/numa_numa_was_a_bop.webp'
+import owCharlie from '../../assets/legacy/images/ow_Charlie_ow_that_REALLY_hurt.webp'
+import trendsSoBig from '../../assets/legacy/images/trends_so_big_the_norwegian_army_got_involved-Harlem_Shake.webp'
+import wowSuchMeme from '../../assets/legacy/images/wow_such_meme_generation-Doge.webp'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 interface MemeCenterWindowProps {
@@ -15,9 +23,39 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
   const memes = [
     {
       image: badLuckBrian,
-      title: 'Bad Luck Brian',
-      topText: 'INVESTS IN CRYPTO',
-      bottomText: 'MARKET CRASHES NEXT DAY'
+      title: 'Bad Luck Brian'
+    },
+    {
+      image: dicksOutForHarambe,
+      title: 'Dicks Out For Harambe'
+    },
+    {
+      image: feelsGoodMan,
+      title: 'Feels Good Man'
+    },
+    {
+      image: millennialSelfDefense,
+      title: 'Millennial Self Defense 101'
+    },
+    {
+      image: nothingBetterThanRickRoll,
+      title: 'Nothing Better Than A Classic Rick Roll'
+    },
+    {
+      image: numaNuma,
+      title: 'Numa Numa Was A Bop'
+    },
+    {
+      image: owCharlie,
+      title: 'Ow Charlie Ow That REALLY Hurt'
+    },
+    {
+      image: trendsSoBig,
+      title: 'Trends So Big The Norwegian Army Got Involved'
+    },
+    {
+      image: wowSuchMeme,
+      title: 'Wow Such Meme Generation'
     }
   ]
 
@@ -28,7 +66,7 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
         h={400}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
         padding: isMobile ? '8px' : '16px',
@@ -56,7 +94,7 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
             fontSize: isMobile ? '9px' : '11px',
               fontFamily: 'MS Sans Serif, sans-serif'
             }}>
-              Classic 2000s Internet Gold
+              Millennial Internet Gold
             </p>
           </div>
 
@@ -78,7 +116,6 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
               </h3>
               
               <div style={{
-                position: 'relative',
                 display: 'inline-block',
                 border: '2px inset #c0c0c0'
               }}>
@@ -86,48 +123,13 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
                   src={meme.image} 
                   alt={meme.title}
                   style={{
-                  width: isMobile ? '250px' : '300px',
-                  height: isMobile ? '250px' : '300px',
-                    objectFit: 'cover',
+                    maxWidth: isMobile ? '250px' : '300px',
+                    maxHeight: isMobile ? '250px' : '300px',
+                    width: 'auto',
+                    height: 'auto',
                     display: 'block'
                   }}
                 />
-                
-                {/* Top Text */}
-                <div style={{
-                  position: 'absolute',
-                  top: '10px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  color: 'white',
-                fontSize: isMobile ? '12px' : '16px',
-                  fontFamily: 'Impact, Arial Black, sans-serif',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  textShadow: '2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000',
-                maxWidth: isMobile ? '230px' : '280px',
-                  lineHeight: '1.1'
-                }}>
-                  {meme.topText}
-                </div>
-                
-                {/* Bottom Text */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '10px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  color: 'white',
-                fontSize: isMobile ? '12px' : '16px',
-                  fontFamily: 'Impact, Arial Black, sans-serif',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  textShadow: '2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000',
-                maxWidth: isMobile ? '230px' : '280px',
-                  lineHeight: '1.1'
-                }}>
-                  {meme.bottomText}
-                </div>
               </div>
             </div>
           ))}
@@ -140,7 +142,7 @@ export default function MemeCenterWindow({ title, onClose, onMinimize, style }: 
           fontSize: isMobile ? '9px' : '11px',
             fontFamily: 'MS Sans Serif, sans-serif'
           }}>
-            <p>💡 <strong>Fun Fact:</strong> Bad Luck Brian became an internet sensation in 2012, but the photo was taken in 2000 for a school yearbook!</p>
+            <p>💡 <strong>Fun Fact:</strong> Memes were born in the 2000s! The term "meme" was coined by Richard Dawkins in 1976, but internet memes as we know them started with classics like Bad Luck Brian, Nyan Cat, and the early days of 4chan!</p>
           </div>
         </div>
       </Window95Frame>

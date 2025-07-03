@@ -4,6 +4,7 @@ import SnakeGame from '../SnakeGame'
 import MinesweeperGame from '../MinesweeperGame'
 import SpaceCadetPinball from '../SpaceCadetPinball'
 import PokerGame from '../PokerGame'
+import DopeWarsGame from '../DopeWarsGame'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 interface GameCenterWindowProps {
@@ -13,13 +14,13 @@ interface GameCenterWindowProps {
   style: CSSProperties
 }
 
-type GameType = 'Snake' | 'Minesweeper' | 'Space Cadet' | 'Poker'
+type GameType = 'Snake' | 'Minesweeper' | 'Space Cadet' | 'Poker' | 'Dope Wars'
 
 export default function GameCenterWindow({ title, onClose, onMinimize, style }: GameCenterWindowProps) {
   const isMobile = useMediaQuery('(max-width: 640px)')
   const [selectedGame, setSelectedGame] = useState<GameType | null>(null)
   
-  const games: GameType[] = ['Snake', 'Minesweeper', 'Space Cadet', 'Poker']
+  const games: GameType[] = ['Snake', 'Minesweeper', 'Space Cadet', 'Poker', 'Dope Wars']
 
   const renderGameContent = () => {
     switch (selectedGame) {
@@ -31,6 +32,8 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
         return <SpaceCadetPinball />
       case 'Poker':
         return <PokerGame />
+      case 'Dope Wars':
+        return <DopeWarsGame />
       default:
         return null
     }
@@ -43,7 +46,7 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
         h={selectedGame === 'Space Cadet' ? 800 : 700}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
         padding: isMobile ? '8px' : '16px',
@@ -107,7 +110,8 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
                     {game === 'Snake' ? '🐍' :
                      game === 'Minesweeper' ? '💣' :
                      game === 'Space Cadet' ? '🚀' :
-                     game === 'Poker' ? '🃏' : '🎮'}
+                     game === 'Poker' ? '🃏' :
+                     game === 'Dope Wars' ? '💊' : '🎮'}
                   </span>
                   {game}
                 </button>

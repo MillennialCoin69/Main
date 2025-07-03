@@ -17,7 +17,7 @@ export default function XWindow({ title, onClose, onMinimize, style }: XWindowPr
         h={500}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
           height: '100%',

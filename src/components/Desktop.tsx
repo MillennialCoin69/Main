@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DesktopIcon from './DesktopIcon'
 import DesktopLogo from './DesktopLogo'
 import Taskbar from './Taskbar'
@@ -8,8 +8,6 @@ import MemeCenterWindow from './windows/MemeCenterWindow'
 import ToyBoxWindow from './windows/ToyBoxWindow'
 import MTVPlayerWindow from './windows/MTVPlayerWindow'
 import GameCenterWindow from './windows/GameCenterWindow'
-import MillennialCoinWindow from './windows/MillennialCoinWindow'
-import HomeWindow from './windows/HomeWindow'
 import XWindow from './windows/XWindow'
 import CommunityWindow from './windows/CommunityWindow'
 import DexScreenerWindow from './windows/DexScreenerWindow'
@@ -21,7 +19,6 @@ import badLuckBrian from '../assets/legacy/images/Bad_Luck_Brian.webp'
 import tamagotchi from '../assets/legacy/images/tamagotchi.png'
 import mtvLogo from '../assets/legacy/images/MTV.png'
 import retroGame from '../assets/legacy/images/original-8e40ec6ede55a7d414e29369f2add36c.webp'
-import millennialCoin from '../assets/legacy/images/PHOTO-2025-06-25-11-54-02.jpg'
 
 interface DesktopProps {
   onBSOD: () => void
@@ -40,52 +37,66 @@ export default function Desktop({ onBSOD }: DesktopProps) {
   const [showStartMenu, setShowStartMenu] = useState(false)
   const [nextZIndex, setNextZIndex] = useState(1000)
   const isMobile = useMediaQuery('(max-width: 768px)')
+  
+  // Detect mobile browser vs in-app browser
+  const [isMobileBrowser, setIsMobileBrowser] = useState(false)
+  
+  useEffect(() => {
+    const detectMobileBrowser = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                          (window.navigator as any).standalone === true
+      const isTelegram = navigator.userAgent.includes('Telegram') || 
+                        window.location.href.includes('telegram') ||
+                        document.referrer.includes('telegram') ||
+                        window.location.href.includes('tg://') ||
+                        navigator.userAgent.includes('TelegramBot')
+      
+      const isMobileBrowserResult = isMobileDevice && !isStandalone && !isTelegram && isMobile
+      setIsMobileBrowser(isMobileBrowserResult)
+      
+      // Add CSS class to body for styling
+      if (isMobileBrowserResult) {
+        document.body.classList.add('mobile-browser')
+      } else {
+        document.body.classList.remove('mobile-browser')
+      }
+    }
+    
+    detectMobileBrowser()
+    window.addEventListener('resize', detectMobileBrowser)
+    return () => window.removeEventListener('resize', detectMobileBrowser)
+  }, [isMobile])
 
   const desktopIcons = [
-    // Main token info
-    {
-      id: 'millennial-coin',
-      title: 'Millennial Coin',
-      icon: millennialCoin,
-      type: 'millennial-coin',
-      position: { x: 20, y: 20 }
-    },
-    
     // Navigation pages (left side)
-    {
-      id: 'home',
-      title: 'Home',
-      icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE2IDJMMjggMTJIMjRWMjhIMjBWMjBIMTJWMjhIOFYxMkg0TDE2IDJaIiBmaWxsPSIjMDA4MDgwIi8+Cjwvc3ZnPgo=',
-      type: 'home',
-      position: { x: 20, y: 120 }
-    },
     {
       id: 'x',
       title: 'X (Twitter)',
       icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTI0IDhIMjBMMTYgMTJMMTIgOEg4TDEyIDEyTDggMjRIMTJMMTYgMjBMMjAgMjRIMjRMMjAgMTJMMjQgOFoiIGZpbGw9IiMxREE1RjIiLz4KPC9zdmc+Cg==',
       type: 'x',
-      position: { x: 20, y: 220 }
+      position: { x: 20, y: 20 }
     },
     {
       id: 'community',
       title: 'Community',
       icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMCIgcj0iNCIgZmlsbD0iIzAwODA4MCIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjEwIiByPSI0IiBmaWxsPSIjMDA4MDgwIi8+CjxwYXRoIGQ9Ik00IDI0QzQgMjAgOCAyMCAxMiAyMFMxNiAyMCAxNiAyNEg0WiIgZmlsbD0iIzAwODA4MCIvPgo8cGF0aCBkPSJNMTYgMjRDMTYgMjAgMjAgMjAgMjQgMjRTMjggMjAgMjggMjRIMTZaIiBmaWxsPSIjMDA4MDgwIi8+Cjwvc3ZnPgo=',
       type: 'community',
-      position: { x: 20, y: 320 }
+      position: { x: 20, y: 120 }
     },
     {
       id: 'dexscreener',
       title: 'DexScreener',
       icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMDA4MDgwIi8+CjxwYXRoIGQ9Ik04IDEyTDEyIDhMMTYgMTJMMjAgOEwyNCA4VjI0SDhWMTJaIiBmaWxsPSIjRkZGIi8+CjxsaW5lIHgxPSIxMiIgeTE9IjE2IiB4Mj0iMjAiIHkyPSIxNiIgc3Ryb2tlPSIjMDA4MDgwIiBzdHJva2Utd2lkdGg9IjIiLz4KPGxpbmUgeDE9IjEyIiB5MT0iMjAiIHgyPSIxNiIgeTI9IjIwIiBzdHJva2U9IiMwMDgwODAiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K',
       type: 'dexscreener',
-      position: { x: 20, y: 420 }
+      position: { x: 20, y: 220 }
     },
     {
       id: 'dextools',
       title: 'DexTools',
       icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggOEwyNCAyNE0yNCA4TDggMjQiIHN0cm9rZT0iIzAwODA4MCIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxjaXJjbGUgY3g9IjE2IiBjeT0iMTYiIHI9IjgiIHN0cm9rZT0iIzAwODA4MCIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPgo=',
       type: 'dextools',
-      position: { x: 20, y: 520 }
+      position: { x: 20, y: 320 }
     },
 
     // Entertainment icons (right side)
@@ -120,10 +131,24 @@ export default function Desktop({ onBSOD }: DesktopProps) {
       type: 'game-center',
       position: { x: 20, y: 320 },
       isRightSide: true
+    },
+    {
+      id: 'telegram',
+      title: 'Millennial Telegram',
+      icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTQiIGZpbGw9IiMyQUFCRUUiLz4KPHBhdGggZD0iTTExIDIyTDExLjUgMTVMMjEgMTBMMTMgMTZIMTFWMjJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTMgMTZMMTUgMjFMMTYgMjBMMjEgMTVMMTMgMTZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K',
+      type: 'telegram',
+      position: { x: 20, y: 420 },
+      isRightSide: true
     }
   ]
 
   const openWindow = (iconId: string, type: string, title: string) => {
+    // Handle external links
+    if (type === 'telegram') {
+      window.open('https://t.me/millennialrangers', '_blank')
+      return
+    }
+
     // Check if window is already open
     const existingWindow = openWindows.find(w => w.id === iconId)
     if (existingWindow) {
@@ -184,10 +209,6 @@ export default function Desktop({ onBSOD }: DesktopProps) {
     }
 
     switch (window.type) {
-      case 'millennial-coin':
-        return <MillennialCoinWindow {...baseProps} />
-      case 'home':
-        return <HomeWindow {...baseProps} />
       case 'x':
         return <XWindow {...baseProps} />
       case 'community':
@@ -222,7 +243,7 @@ export default function Desktop({ onBSOD }: DesktopProps) {
         className="mobile-icons-grid"
         style={{
           position: 'absolute',
-          bottom: '80px', // Above taskbar
+          bottom: isMobileBrowser ? '120px' : '80px', // Extra space for mobile browser UI
           left: '0',
           right: '0',
           display: 'flex',
@@ -263,7 +284,7 @@ export default function Desktop({ onBSOD }: DesktopProps) {
         onStartClick={() => setShowStartMenu(!showStartMenu)}
         onWindowClick={restoreWindow}
       />
-      <RickRollButton />
+      <RickRollButton hideWhenWindowsOpen={openWindows.length > 0} />
     </div>
   );
 
@@ -307,7 +328,7 @@ export default function Desktop({ onBSOD }: DesktopProps) {
       />
 
       {/* Rick Roll Button */}
-      <RickRollButton />
+      <RickRollButton hideWhenWindowsOpen={openWindows.length > 0} />
     </div>
   )
 

@@ -20,7 +20,7 @@ export default function MillennialCoinWindow({ title, onClose, onMinimize, style
         h={500}
         onClose={onClose}
         onMinimize={onMinimize}
-      {...style}
+        style={style}
       >
         <div style={{ 
         padding: isMobile ? '8px' : '16px',

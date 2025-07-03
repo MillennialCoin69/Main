@@ -203,27 +203,7 @@ export default function ToyBoxWindow({ title, onClose, onMinimize, style }: ToyB
             </div>
           </div>
 
-          {/* Other 2000s Toys */}
-          <div style={{
-          padding: isMobile ? '8px' : '12px',
-            background: '#ffff80',
-            border: '2px inset #c0c0c0',
-          fontSize: isMobile ? '9px' : '11px',
-            fontFamily: 'MS Sans Serif, sans-serif'
-          }}>
-            <h4 style={{
-              margin: '0 0 8px 0',
-            fontSize: isMobile ? '10px' : '12px',
-              color: '#000080'
-            }}>
-              🎯 Other 2000s Classics:
-            </h4>
-            <div>• Furby - The creepy talking toy that never shut up</div>
-            <div>• Pokémon Cards - Gotta catch 'em all!</div>
-            <div>• Beanie Babies - Worth millions... or not</div>
-            <div>• Game Boy Color - Portable gaming revolution</div>
-            <div>• Yo-Yo - The original fidget spinner</div>
-          </div>
+
         </div>
       </Window95Frame>
   )

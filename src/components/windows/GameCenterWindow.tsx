@@ -51,7 +51,7 @@ export default function GameCenterWindow({ title, onClose, onMinimize, style }: 
         <div style={{ 
         padding: isMobile ? '8px' : '16px',
           height: '100%',
-          overflow: 'auto',
+          overflow: selectedGame === 'Snake' ? 'hidden' : 'auto', // Disable scrolling for Snake game
           background: '#c0c0c0'
         }}>
         {!selectedGame ? (
